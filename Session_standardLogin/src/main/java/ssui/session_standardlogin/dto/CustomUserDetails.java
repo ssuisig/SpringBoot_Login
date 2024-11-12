@@ -1,5 +1,8 @@
 package ssui.session_standardlogin.dto;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,13 +15,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
+@Setter
+@Getter
+@EqualsAndHashCode(of= {"username"}) //같은 사용자가 다른 객체로 인식되지 않도록 함, 중복 로그인 방지
 public class CustomUserDetails implements UserDetails {
 
     private UserEntity userEntity;
+    private String username;
 
     public CustomUserDetails(UserEntity userEntity) {
         this.userEntity = userEntity;
+        this.username = userEntity.getUsername();
     }
 
     //사용자의 역할을 반환
@@ -42,7 +49,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userEntity.getUsername();
+        return username;
     }
 
     //만료됐는지, 이용가능한지 등등.. 임의로 true
